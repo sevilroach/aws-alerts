@@ -10,16 +10,16 @@ import (
 
 //RSS struct which contains the whole status data
 type RSS struct {
-	XMLName xml.Name  `xml:"rss"`
-	Text    string    `xml:",chardata"`
-	Version string    `xml:"version,attr"`
-	RSS     []Channel `xml:"channel"`
+	XMLName  xml.Name  `xml:"rss"`
+	Text     string    `xml:",chardata"`
+	Version  string    `xml:"version,attr"`
+	Channels []Channel `xml:"channel"`
 }
 
 // Channel struct which contains service info
 type Channel struct {
 	XMLName xml.Name `xml:"channel"`
-	Channel []Item   `xml:"item"`
+	Items   []Item   `xml:"item"`
 }
 
 // Item struct which contains status info of the service
@@ -43,16 +43,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%s", byteValue)
-	var item RSS
+	var rssData RSS
 
-	xml.Unmarshal(byteValue, &item)
-	fmt.Println(item.RSS[0].Channel[0])
-	for i := 0; i < len(item.Channel); i++ {
-		fmt.Println("Title: " + item.Channel[i].Title)
-		fmt.Println("Link: " + item.Channel[i].Link)
-		fmt.Println("PubDate: " + item.Channel[i].PubDate)
-		fmt.Println("Guid: " + item.Channel[i].GUID)
-		fmt.Println("Description: " + item.Channel[i].Description)
+	xml.Unmarshal(byteValue, &rssData)
+
+	for _, item := range rssData.Channels[0].Items {
+		fmt.Println("Title: " + item.Title)
+		fmt.Println("Link: " + item.Link)
+		fmt.Println("PubDate: " + item.PubDate)
+		fmt.Println("Guid: " + item.GUID)
+		fmt.Println("Description: " + item.Description)
+		fmt.Println("---------------------------------------")
 	}
 }
