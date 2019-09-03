@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 //RSS struct which contains the whole status data
@@ -48,11 +49,13 @@ func main() {
 	xml.Unmarshal(byteValue, &rssData)
 
 	for _, item := range rssData.Channels[0].Items {
-		fmt.Println("Title: " + item.Title)
-		fmt.Println("Link: " + item.Link)
-		fmt.Println("PubDate: " + item.PubDate)
-		fmt.Println("Guid: " + item.GUID)
-		fmt.Println("Description: " + item.Description)
-		fmt.Println("---------------------------------------")
+		if !(strings.Contains(item.Title, "[RESOLVED]")) {
+			fmt.Println("Title: " + item.Title)
+			fmt.Println("Link: " + item.Link)
+			fmt.Println("PubDate: " + item.PubDate)
+			fmt.Println("Guid: " + item.GUID)
+			fmt.Println("Description: " + item.Description)
+			fmt.Println("---------------------------------------")
+		}
 	}
 }
